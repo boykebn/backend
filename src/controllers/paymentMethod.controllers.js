@@ -1,9 +1,10 @@
-const { selectAllUsers, selectUserId, insertUser, updateUser, deletedUser } = require('../models/users.models')
-const errorHandler = require('../helpers/errorHandler.helpers')
+const errorHandler = require('../helpers/errorHandler.helpers');
+const { selectAllPaymentMethod, selectPayementMethodId, insertPaymentMethod, updatePaymentMethod, deletedPaymentMethod } = require('../models/paymentMethod.models');
 
-exports.readAllUsers = (req, res) => {
-  selectAllUsers(req.body, (err, data) => {
+exports.readAllPaymentMethod = (req, res) => {
+  selectAllPaymentMethod(req.body, (err, data) => {
     if(err){
+      console.log(err)
       return errorHandler(err, res);
     }
     return res.status(200).json({
@@ -14,10 +15,9 @@ exports.readAllUsers = (req, res) => {
   })
 };
 
-exports.readUsers = (req, res) => {
-  selectUserId(req.params, (err, data) => {
+exports.readPaymentMethod = (req, res) => {
+  selectPayementMethodId(req.params, (err, data) => {
     if(err){
-      console.log(err);
       return errorHandler(err, res);
     }
     return res.status(200).json({
@@ -28,8 +28,8 @@ exports.readUsers = (req, res) => {
   })
 };
 
-exports.createUsers = (req, res) => {
-  insertUser(req.body, (err, data) => {
+exports.createPaymentMethod = (req, res) => {
+  insertPaymentMethod(req.body, (err, data) => {
     if(err){
       return errorHandler(err, res);
     }
@@ -41,8 +41,8 @@ exports.createUsers = (req, res) => {
   })
 };
 
-exports.updateUsers = (req, res) => {
-  updateUser(req, (err, data) => {
+exports.updatePaymentMethod = (req, res) => {
+  updatePaymentMethod(req, (err, data) => {
     if(err){
       return errorHandler(err, res);
     }
@@ -54,8 +54,8 @@ exports.updateUsers = (req, res) => {
   })
 };
 
-exports.deleteUsers = (req, res) => {
-  deletedUser(req.params, (err, data) => {
+exports.deletePaymentMethod = (req, res) => {
+  deletedPaymentMethod(req.params, (err, data) => {
     if(err){
       return errorHandler(err, res);
     }

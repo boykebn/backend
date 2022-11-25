@@ -152,6 +152,8 @@ CREATE TABLE "subscribe" (
 );
 
 
+ALTER TABLE "users" ADD CONSTRAINT "email" UNIQUE ("email");
+
 
 INSERT INTO "users"
 ("picture", "firstName", "lastName", "phoneNUm", "email", "password")

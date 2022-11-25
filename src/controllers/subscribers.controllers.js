@@ -1,9 +1,10 @@
-const { selectAllUsers, selectUserId, insertUser, updateUser, deletedUser } = require('../models/users.models')
+const { selectAllSubscribers, selectSubscribersId, insertSubscribers, updateSubscribers, deletedSubscribers } = require('../models/subscribers.models')
 const errorHandler = require('../helpers/errorHandler.helpers')
 
-exports.readAllUsers = (req, res) => {
-  selectAllUsers(req.body, (err, data) => {
+exports.readAllSubscribers = (req, res) => {
+  selectAllSubscribers(req.body, (err, data) => {
     if(err){
+      console.log(err)
       return errorHandler(err, res);
     }
     return res.status(200).json({
@@ -14,10 +15,9 @@ exports.readAllUsers = (req, res) => {
   })
 };
 
-exports.readUsers = (req, res) => {
-  selectUserId(req.params, (err, data) => {
+exports.readSubscribers = (req, res) => {
+  selectSubscribersId(req.params, (err, data) => {
     if(err){
-      console.log(err);
       return errorHandler(err, res);
     }
     return res.status(200).json({
@@ -28,8 +28,8 @@ exports.readUsers = (req, res) => {
   })
 };
 
-exports.createUsers = (req, res) => {
-  insertUser(req.body, (err, data) => {
+exports.createSubscribers = (req, res) => {
+  insertSubscribers(req.body, (err, data) => {
     if(err){
       return errorHandler(err, res);
     }
@@ -41,8 +41,8 @@ exports.createUsers = (req, res) => {
   })
 };
 
-exports.updateUsers = (req, res) => {
-  updateUser(req, (err, data) => {
+exports.updateSubscribers = (req, res) => {
+  updateSubscribers(req, (err, data) => {
     if(err){
       return errorHandler(err, res);
     }
@@ -54,8 +54,8 @@ exports.updateUsers = (req, res) => {
   })
 };
 
-exports.deleteUsers = (req, res) => {
-  deletedUser(req.params, (err, data) => {
+exports.deleteSubscribers = (req, res) => {
+  deletedSubscribers(req.params, (err, data) => {
     if(err){
       return errorHandler(err, res);
     }

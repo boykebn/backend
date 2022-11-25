@@ -1,8 +1,8 @@
-const { selectAllUsers, selectUserId, insertUser, updateUser, deletedUser } = require('../models/users.models')
+const { selectAllTransaction, insertTransaction, selectTransactionId, updateTransaction, deletedTransaction } = require('../models/transaction.models')
 const errorHandler = require('../helpers/errorHandler.helpers')
 
-exports.readAllUsers = (req, res) => {
-  selectAllUsers(req.body, (err, data) => {
+exports.readAllTransaction = (req, res) => {
+  selectAllTransaction(req.body, (err, data) => {
     if(err){
       return errorHandler(err, res);
     }
@@ -14,8 +14,8 @@ exports.readAllUsers = (req, res) => {
   })
 };
 
-exports.readUsers = (req, res) => {
-  selectUserId(req.params, (err, data) => {
+exports.readTransaction = (req, res) => {
+  selectTransactionId(req.params, (err, data) => {
     if(err){
       console.log(err);
       return errorHandler(err, res);
@@ -28,8 +28,8 @@ exports.readUsers = (req, res) => {
   })
 };
 
-exports.createUsers = (req, res) => {
-  insertUser(req.body, (err, data) => {
+exports.createTransaction = (req, res) => {
+  insertTransaction(req.body, (err, data) => {
     if(err){
       return errorHandler(err, res);
     }
@@ -41,8 +41,8 @@ exports.createUsers = (req, res) => {
   })
 };
 
-exports.updateUsers = (req, res) => {
-  updateUser(req, (err, data) => {
+exports.updateTransaction = (req, res) => {
+  updateTransaction(req, (err, data) => {
     if(err){
       return errorHandler(err, res);
     }
@@ -54,8 +54,8 @@ exports.updateUsers = (req, res) => {
   })
 };
 
-exports.deleteUsers = (req, res) => {
-  deletedUser(req.params, (err, data) => {
+exports.deleteTransaction = (req, res) => {
+  deletedTransaction(req.params, (err, data) => {
     if(err){
       return errorHandler(err, res);
     }

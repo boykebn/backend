@@ -1,9 +1,10 @@
-const { selectAllUsers, selectUserId, insertUser, updateUser, deletedUser } = require('../models/users.models')
-const errorHandler = require('../helpers/errorHandler.helpers')
+const errorHandler = require('../helpers/errorHandler.helpers');
+const { selectAllMovieScheduleTime, selectMovieScheduleTimeId, insertMovieScheduleTime, updateMovieScheduleTime, deletedMovieScheduleTime } = require('../models/movieScheduleTime.models');
 
-exports.readAllUsers = (req, res) => {
-  selectAllUsers(req.body, (err, data) => {
+exports.readAllMovieScheduleTime = (req, res) => {
+  selectAllMovieScheduleTime(req.body, (err, data) => {
     if(err){
+      console.log(err)
       return errorHandler(err, res);
     }
     return res.status(200).json({
@@ -14,10 +15,9 @@ exports.readAllUsers = (req, res) => {
   })
 };
 
-exports.readUsers = (req, res) => {
-  selectUserId(req.params, (err, data) => {
+exports.readMovieScheduleTime = (req, res) => {
+  selectMovieScheduleTimeId(req.params, (err, data) => {
     if(err){
-      console.log(err);
       return errorHandler(err, res);
     }
     return res.status(200).json({
@@ -28,8 +28,8 @@ exports.readUsers = (req, res) => {
   })
 };
 
-exports.createUsers = (req, res) => {
-  insertUser(req.body, (err, data) => {
+exports.createMovieScheduleTime= (req, res) => {
+  insertMovieScheduleTime(req.body, (err, data) => {
     if(err){
       return errorHandler(err, res);
     }
@@ -41,8 +41,8 @@ exports.createUsers = (req, res) => {
   })
 };
 
-exports.updateUsers = (req, res) => {
-  updateUser(req, (err, data) => {
+exports.updateMovieScheduleTime = (req, res) => {
+  updateMovieScheduleTime(req, (err, data) => {
     if(err){
       return errorHandler(err, res);
     }
@@ -54,8 +54,8 @@ exports.updateUsers = (req, res) => {
   })
 };
 
-exports.deleteUsers = (req, res) => {
-  deletedUser(req.params, (err, data) => {
+exports.deleteMovieScheduleTime = (req, res) => {
+  deletedMovieScheduleTime(req.params, (err, data) => {
     if(err){
       return errorHandler(err, res);
     }
