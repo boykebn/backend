@@ -14,6 +14,6 @@ routes.use('/movieCasts', require('./movieCasts.router'));
 routes.use('/movies', require('./movies.router'));
 routes.use('/genre', require('./genre.router'));
 routes.use('/cinemas', require('./cinemas.router'));
-// routes.use('/casts', require('./casts.router'));
+routes.use('/casts', require('./casts.router'));
 
 module.exports = routes;
