@@ -19,7 +19,7 @@ exports.insertStatus = (data, cb) => {
 
 exports.updateStatus = (data, cb) => {
   const date = new Date();
-  const sql = 'UPDATE "status" SET "name" = $1 WHERE id = $8 RETURNING *';
+  const sql = 'UPDATE "status" SET "name" = $1, "updatedAt" = $2 WHERE id = $3 RETURNING *';
   const values = [data.body.name, date, data.params.id];
   db.query(sql, values, cb);
 };

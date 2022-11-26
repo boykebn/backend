@@ -12,15 +12,15 @@ exports.selectPayementMethodId = (data, cb) => {
 };
 
 exports.insertPaymentMethod = (data, cb) => {
-  const sql = 'INSERT INTO "paymentMethod" ("email", "userId", "codeUnique") VALUES ($1, $2, $3) RETURNING *';
-  const value = [data.email, data.userId, data.codeUnique];
+  const sql = 'INSERT INTO "paymentMethod" ("picture", "name") VALUES ($1, $2) RETURNING *';
+  const value = [data.picture, data.name];
   db.query(sql, value, cb);
 }
 
 exports.updatePaymentMethod = (data, cb) => {
   const date = new Date();
-  const sql = 'UPDATE "paymentMethod" SET "email" = $1, "userId" = $2, "codeUnique" = $3 WHERE id = $4 RETURNING *';
-  const values = [data.body.email, data.body.userId, data.body.codeUnique, date, data.params.id];
+  const sql = 'UPDATE "paymentMethod" SET "picture" = $1, "name" = $2, "UpdatedAt" = $3 WHERE id = $4 RETURNING *';
+  const values = [data.body.picture, data.body.name, date, data.params.id];
   db.query(sql, values, cb);
 };
 

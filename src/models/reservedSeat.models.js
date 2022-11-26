@@ -12,15 +12,15 @@ exports.selectReservedSeatId = (data, cb) => {
 };
 
 exports.insertReservedSeat = (data, cb) => {
-  const sql = 'INSERT INTO "reservedSeat" ("email", "userId", "codeUnique") VALUES ($1, $2, $3) RETURNING *';
-  const value = [data.email, data.userId, data.codeUnique];
+  const sql = 'INSERT INTO "reservedSeat" ("seatNum", "transactionId") VALUES ($1, $2) RETURNING *';
+  const value = [data.seatNum, data.transactionId];
   db.query(sql, value, cb);
 }
 
 exports.updateReservedSeat = (data, cb) => {
   const date = new Date();
-  const sql = 'UPDATE "reservedSeat" SET "email" = $1, "userId" = $2, "codeUnique" = $3 WHERE id = $4 RETURNING *';
-  const values = [data.body.email, data.body.userId, data.body.codeUnique, date, data.params.id];
+  const sql = 'UPDATE "reservedSeat" SET "seatNum" = $1, "transactionId" = $2, "updatedAt" = $3 WHERE id = $4 RETURNING *';
+  const values = [data.body.seatNum, data.body.transactionId, date, data.params.id];
   db.query(sql, values, cb);
 };
 

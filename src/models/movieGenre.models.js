@@ -12,15 +12,15 @@ exports.selectMovieGenreId = (data, cb) => {
 };
 
 exports.insertMovieGenre = (data, cb) => {
-  const sql = 'INSERT INTO "movieGenre" ("email", "userId", "codeUnique") VALUES ($1, $2, $3) RETURNING *';
-  const value = [data.email, data.userId, data.codeUnique];
+  const sql = 'INSERT INTO "movieGenre" ("movieId", "genreId") VALUES ($1, $2) RETURNING *';
+  const value = [data.movieId, data.genreId, data.codeUnique];
   db.query(sql, value, cb);
 }
 
 exports.updateMovieGenre = (data, cb) => {
   const date = new Date();
-  const sql = 'UPDATE "movieGenre" SET "email" = $1, "userId" = $2, "codeUnique" = $3 WHERE id = $4 RETURNING *';
-  const values = [data.body.email, data.body.userId, data.body.codeUnique, date, data.params.id];
+  const sql = 'UPDATE "movieGenre" SET "movieId" = $1, "genreId" = $2, "updatedAt" = $3 WHERE id = $4 RETURNING *';
+  const values = [data.body.movieId, data.body.genreId, date, data.params.id];
   db.query(sql, values, cb);
 };
 

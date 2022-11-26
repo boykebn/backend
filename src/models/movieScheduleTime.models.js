@@ -12,15 +12,15 @@ exports.selectMovieScheduleTimeId = (data, cb) => {
 };
 
 exports.insertMovieScheduleTime = (data, cb) => {
-  const sql = 'INSERT INTO "movieScheduleTime" ("email", "userId", "codeUnique") VALUES ($1, $2, $3) RETURNING *';
-  const value = [data.email, data.userId, data.codeUnique];
+  const sql = 'INSERT INTO "movieScheduleTime" ("time", "movieSchedulesId") VALUES ($1, $2) RETURNING *';
+  const value = [data.time, data.movieSchedulesId];
   db.query(sql, value, cb);
 }
 
 exports.updateMovieScheduleTime = (data, cb) => {
   const date = new Date();
-  const sql = 'UPDATE "movieScheduleTime" SET "email" = $1, "userId" = $2, "codeUnique" = $3 WHERE id = $4 RETURNING *';
-  const values = [data.body.email, data.body.userId, data.body.codeUnique, date, data.params.id];
+  const sql = 'UPDATE "movieScheduleTime" SET "time" = $1, "movieSchedulesId" = $2, "updatedAt" = $3 WHERE id = $4 RETURNING *';
+  const values = [data.body.time, data.body.movieSchedulesId, date, data.params.id];
   db.query(sql, values, cb);
 };
 

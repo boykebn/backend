@@ -19,7 +19,7 @@ exports.insertTransaction = (data, cb) => {
 
 exports.updateTransaction = (data, cb) => {
   const date = new Date();
-  const sql = 'UPDATE "transaction" SET "bookingDate" = $1, "movieId" = $2, "cinemaId" = $3, "movieSchedulesId" = $4, "fullName" = $5, "phoneNUm" = $6,"statusId", "updatedAt" = $7 WHERE id = $8 RETURNING *';
+  const sql = 'UPDATE "transaction" SET "bookingDate" = $1, "movieId" = $2, "cinemaId" = $3, "movieSchedulesId" = $4, "fullName" = $5, "phoneNUm" = $6,"statusId" = $7, "updatedAt" = $8 WHERE id = $9 RETURNING *';
   const values = [data.body.bookingDate, data.body.movieId, data.body.cinemaId, data.body.movieSchedulesId, data.body.fullName, data.body.phoneNUm, data.body.statusId, date, data.params.id];
   db.query(sql, values, cb);
 };

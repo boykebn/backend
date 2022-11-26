@@ -12,15 +12,15 @@ exports.selectCastsId = (data, cb) => {
 };
 
 exports.insertCasts = (data, cb) => {
-  const sql = 'INSERT INTO "casts" ("email", "userId", "codeUnique") VALUES ($1, $2, $3) RETURNING *';
-  const value = [data.email, data.userId, data.codeUnique];
+  const sql = 'INSERT INTO "casts" ("name") VALUES ($1) RETURNING *';
+  const value = [data.name];
   db.query(sql, value, cb);
 }
 
 exports.updateCasts = (data, cb) => {
   const date = new Date();
-  const sql = 'UPDATE "casts" SET "email" = $1, "userId" = $2, "codeUnique" = $3 WHERE id = $4 RETURNING *';
-  const values = [data.body.email, data.body.userId, data.body.codeUnique, date, data.params.id];
+  const sql = 'UPDATE "casts" SET "name" = $1, "updatedAt" = $2 WHERE id = $3 RETURNING *';
+  const values = [data.body.name, date, data.params.id];
   db.query(sql, values, cb);
 };
 

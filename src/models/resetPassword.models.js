@@ -19,7 +19,7 @@ exports.insertResetPassword = (data, cb) => {
 
 exports.updateResetPassword = (data, cb) => {
   const date = new Date();
-  const sql = 'UPDATE "resetPassword" SET "email" = $1, "userId" = $2, "codeUnique" = $3 WHERE id = $4 RETURNING *';
+  const sql = 'UPDATE "resetPassword" SET "email" = $1, "userId" = $2, "codeUnique" = $3, "updatedAt" = $4 WHERE id = $5 RETURNING *';
   const values = [data.body.email, data.body.userId, data.body.codeUnique, date, data.params.id];
   db.query(sql, values, cb);
 };
