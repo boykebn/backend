@@ -19,7 +19,7 @@ exports.insertSubscribers = (data, cb) => {
 
 exports.updateSubscribers = (data, cb) => {
   const date = new Date();
-  const sql = 'UPDATE "subscribe" SET "email" = $1, "updatedAt" = $2 WHERE id = $3 RETURNING *';
+  const sql = `UPDATE "subscribe" SET "email" = COALESCE(NULLIF($1, ''), "email"), "updatedAt" = $2 WHERE id = $3 RETURNING *`;
   const values = [data.body.email, date, data.params.id];
   db.query(sql, values, cb);
 };

@@ -1,8 +1,15 @@
 const db = require('../helpers/db.helpers')
 
-exports.selectAllGenre = (data, cb) => {
-  const sql = 'SELECT * FROM "genre"';
-  db.query(sql, cb);
+exports.selectAllGenre = (filter, cb) => {
+  const sql = `SELECT * FROM "genre" WHERE name LIKE $1 ORDER BY "${filter.sortBy}" ${filter.sort} LIMIT $2 OFFSET $3`;
+  const values = [`%${filter.search}%`, filter.limit, filter.offset]
+  db.query(sql, values, cb);
+};
+
+exports.selectCountAllGenre = (filter, cb) => {
+  const sql = `SELECT COUNT("name") AS "totalData" FROM "genre" WHERE name LIKE $1 `;
+  const values = [`%${filter.search}%`];
+  db.query(sql, values, cb);
 };
 
 exports.selectGenreId = (data, cb) => {
@@ -19,7 +26,7 @@ exports.insertGenre = (data, cb) => {
 
 exports.updateGenre = (data, cb) => {
   const date = new Date();
-  const sql = 'UPDATE "genre" SET "name" = $1, "updatedAt" = $2 WHERE id = $3 RETURNING *';
+  const sql = `UPDATE "genre" SET "name" = COALESCE(NULLIF($1, ''), "name"), "updatedAt" = $2 WHERE id = $3 RETURNING *`;
   const values = [data.body.name, date, data.params.id];
   db.query(sql, values, cb);
 };

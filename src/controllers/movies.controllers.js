@@ -1,18 +1,22 @@
 const errorHandler = require('../helpers/errorHandler.helpers');
-const { selectAllMovies, selectMoviesId, insertMovies, updateMovies, deletedMovies } = require('../models/movies.models');
+const { selectAllMovies, selectMoviesId, insertMovies, updateMovies, deletedMovies, selectCountAllMovies } = require('../models/movies.models');
+const filters = require('../helpers/filter.helpers')
 
 exports.readAllMovies = (req, res) => {
-  selectAllMovies(req.body, (err, data) => {
-    if(err){
-      console.log(err)
-      return errorHandler(err, res);
-    }
-    return res.status(200).json({
-      succes: true,
-      message: 'Database access sucsessfully',
-      results: data.rows
-    })
-  })
+  const sortable = ['name', 'createdAt', 'updatedAt']
+  filters(req.query, sortable, selectCountAllMovies, res, (filter, pageInfo) => {
+    selectAllMovies(filter, (err, data) => {
+      if(err){
+        return errorHandler(err, res);
+      }
+      return res.status(200).json({
+        succes: true,
+        message: 'List All Movies',
+        pageInfo,
+        results: data.rows
+      });
+    });
+  });
 };
 
 exports.readMovies = (req, res) => {

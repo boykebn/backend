@@ -1,17 +1,22 @@
-const { selectAllTransaction, insertTransaction, selectTransactionId, updateTransaction, deletedTransaction } = require('../models/transaction.models')
+const { selectAllTransaction, insertTransaction, selectTransactionId, updateTransaction, deletedTransaction, selectCountAllTransaction } = require('../models/transaction.models')
 const errorHandler = require('../helpers/errorHandler.helpers')
+const filters = require('../helpers/filter.helpers')
 
 exports.readAllTransaction = (req, res) => {
-  selectAllTransaction(req.body, (err, data) => {
-    if(err){
-      return errorHandler(err, res);
-    }
-    return res.status(200).json({
-      succes: true,
-      message: 'Database access sucsessfully',
-      results: data.rows
-    })
-  })
+  const sortable = ['name', 'createdAt', 'updatedAt']
+  filters(req.query, sortable, selectCountAllTransaction, res, (filter, pageInfo) => {
+    selectAllTransaction(filter, (err, data) => {
+      if(err){
+        return errorHandler(err, res);
+      }
+      return res.status(200).json({
+        succes: true,
+        message: 'List All Transaction',
+        pageInfo,
+        results: data.rows
+      });
+    });
+  });
 };
 
 exports.readTransaction = (req, res) => {

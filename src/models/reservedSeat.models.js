@@ -19,7 +19,7 @@ exports.insertReservedSeat = (data, cb) => {
 
 exports.updateReservedSeat = (data, cb) => {
   const date = new Date();
-  const sql = 'UPDATE "reservedSeat" SET "seatNum" = $1, "transactionId" = $2, "updatedAt" = $3 WHERE id = $4 RETURNING *';
+  const sql = `UPDATE "reservedSeat" SET "seatNum" = COALESCE(NULLIF($1, ''), "seatNum"), "transactionId" = COALESCE(NULLIF($2, ''), "transacrionId"), "updatedAt" = $3 WHERE id = $4 RETURNING *`;
   const values = [data.body.seatNum, data.body.transactionId, date, data.params.id];
   db.query(sql, values, cb);
 };

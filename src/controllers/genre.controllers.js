@@ -1,18 +1,23 @@
 const errorHandler = require('../helpers/errorHandler.helpers');
-const { selectAllGenre, selectGenreId, insertGenre, updateGenre, deletedGenre } = require('../models/genre.models');
+const { selectAllGenre, selectGenreId, insertGenre, updateGenre, deletedGenre, selectCountAllGenre } = require('../models/genre.models');
+const filters = require('../helpers/filter.helpers')
 
 exports.readAllGenre = (req, res) => {
-  selectAllGenre(req.body, (err, data) => {
-    if(err){
-      console.log(err)
-      return errorHandler(err, res);
-    }
-    return res.status(200).json({
-      succes: true,
-      message: 'Database access sucsessfully',
-      results: data.rows
-    })
-  })
+  const sortable = ['name', 'createdAt', 'updatedAt']
+  filters(req.query, sortable, selectCountAllGenre, res, (filter, pageInfo) => {
+    selectAllGenre(filter, (err, data) => {
+      if(err){
+        console.log(err)
+        return errorHandler(err, res);
+      }
+      return res.status(200).json({
+        succes: true,
+        message: 'Database access sucsessfully',
+        pageInfo,
+        results: data.rows
+      });
+    });
+  });
 };
 
 exports.readGenre = (req, res) => {
