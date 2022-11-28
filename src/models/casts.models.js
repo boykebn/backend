@@ -26,7 +26,7 @@ exports.insertCasts = (data, cb) => {
 
 exports.updateCasts = (data, cb) => {
   const date = new Date();
-  const sql = `UPDATE "casts" SET "name" = COALESCE(NULLIF($1, ''), "name"), "updatedAt" = $2 WHERE id = $3 RETURNING *`;
+  const sql = `UPDATE "casts" SET "name" = COALESCE(NULLIF($1, '')::VARCHAR, "name"), "updatedAt" = $2 WHERE id = $3 RETURNING *`;
   const values = [data.body.name, date, data.params.id];
   db.query(sql, values, cb);
 };

@@ -6,6 +6,7 @@ exports.readAllMovies = (req, res) => {
   const sortable = ['name', 'createdAt', 'updatedAt']
   filters(req.query, sortable, selectCountAllMovies, res, (filter, pageInfo) => {
     selectAllMovies(filter, (err, data) => {
+      console.log(err)
       if(err){
         return errorHandler(err, res);
       }

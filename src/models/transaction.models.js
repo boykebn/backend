@@ -26,7 +26,7 @@ exports.insertTransaction = (data, cb) => {
 
 exports.updateTransaction = (data, cb) => {
   const date = new Date();
-  const sql = `UPDATE "transaction" SET "bookingDate" = COALESCE(NULLIF($1, ''), "bookingDate"), "movieId" = COALESCE(NULLIF($2, ''), "movieId"), "cinemaId" = COALESCE(NULLIF($3, ''), "cinemaId"), "movieSchedulesId" = COALESCE(NULLIF($4, ''), movieSchedulesId"), "fullName" = COALESCE(NULLIF($5, ''), "fullName"), "phoneNUm" = COALESCE(NULLIF($6, ''), "phoneNUm"),"statusId" = COALESCE(NULLIF($7, ''), "statusId"), "updatedAt" = $8 WHERE id = $9 RETURNING *`;
+  const sql = `UPDATE "transaction" SET "bookingDate" = COALESCE(NULLIF($1, ''), "bookingDate"), "movieId" = COALESCE(NULLIF($2, '')::INT, "movieId"), "cinemaId" = COALESCE(NULLIF($3, '')::INT, "cinemaId"), "movieSchedulesId" = COALESCE(NULLIF($4, '')::INT, movieSchedulesId"), "fullName" = COALESCE(NULLIF($5, '')::VARCHAR, "fullName"), "phoneNUm" = COALESCE(NULLIF($6, '')::VARCHAR, "phoneNUm"),"statusId" = COALESCE(NULLIF($7, '')::INT, "statusId"), "updatedAt" = $8 WHERE id = $9 RETURNING *`;
   const values = [data.body.bookingDate, data.body.movieId, data.body.cinemaId, data.body.movieSchedulesId, data.body.fullName, data.body.phoneNUm, data.body.statusId, date, data.params.id];
   db.query(sql, values, cb);
 };

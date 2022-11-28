@@ -1,32 +1,21 @@
 const express = require('express');
-const db = require('./src/helpers/db.helpers');
+const cors = require('cors')
 
 const app = express();
 
 app.use(express.json())
 app.use(express.urlencoded({extended: false}))
+app.use(cors())
 
 app.use('/', require('./src/routes'))
 
 
 app.get('/', (req, res) => {
-  db.query('SELECT * FROM users', (error, results) => {
-    if(error) {
-      return res.status(500).json({
-        succes: false,
-        message: "database access failed"
-      })
-    }else {
-      return res.status(200).json({
-        succes: true,
-        message: "database access succesfully",
-        data: results.rows
-      });
-    }
+  return res.status(200).json({
+    succes: true,
+    message: "backend is running well!"
   });
 });
-
-
 
 
 app.listen(8888, () => {
