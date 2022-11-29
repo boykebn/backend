@@ -31,10 +31,10 @@ exports.insertUser = (data, cb) => {
   db.query(sql, value, cb);
 }
 
-exports.updateUser = (data, cb) => {
-  const date = new Date();
-  const sql = `UPDATE "users" SET "picture" = COALESCE(NULLIF($1, '')::VARCHAR, "picture"), "firstName" = COALESCE(NULLIF($2, '')::VARCHAR, "firstName"), "lastName" = COALESCE(NULLIF($3, '')::VARCHAR, "lastName"), "phoneNUm" = COALESCE(NULLIF($4, '')::VARCHAR, "phoneNUm"), "email" = COALESCE(NULLIF($5, '')::VARCHAR, "email"), "password" = COALESCE(NULLIF($6, '')::VARCHAR, "password"), "updatedAt" = $7 WHERE id = $8 RETURNING *`;
-  const values = [data.body.picture, data.body.firstName, data.body.lastName, data.body.phoneNUm, data.body.email, data.body.password, date, data.params.id];
+exports.updateUser = (id, data, cb) => {
+  // const date = new Date();
+  const sql = `UPDATE "users" SET "picture" = COALESCE(NULLIF($1, '')::VARCHAR, "picture"), "firstName" = COALESCE(NULLIF($2, '')::VARCHAR, "firstName"), "lastName" = COALESCE(NULLIF($3, '')::VARCHAR, "lastName"), "phoneNUm" = COALESCE(NULLIF($4, '')::VARCHAR, "phoneNUm"), "email" = COALESCE(NULLIF($5, '')::VARCHAR, "email"), "password" = COALESCE(NULLIF($6, '')::VARCHAR, "password") WHERE id = $7 RETURNING *`;
+  const values = [data.picture, data.firstName, data.lastName, data.phoneNUm, data.email, data.password, id];
   db.query(sql, values, cb);
 };
 

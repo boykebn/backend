@@ -48,7 +48,7 @@ exports.createUsers = (req, res) => {
 };
 
 exports.updateUsers = (req, res) => {
-  updateUser(req, (err, data) => {
+  updateUser(req.params.id, req.body, (err, data) => {
     if(err){
       return errorHandler(err, res);
     }

@@ -11,6 +11,12 @@ exports.selectResetPasswordId = (data, cb) => {
   db.query(sql, values, cb);
 };
 
+exports.selectResetPasswordByEmailAndCode = (data, cb) => {
+  const sql = 'SELECT * FROM "resetPassword" WHERE "email"= $1 AND "codeUnique" = $2';
+  const values = [data.email, data.codeUnique];
+  db.query(sql, values, cb);
+};
+
 exports.insertResetPassword = (data, cb) => {
   const sql = 'INSERT INTO "resetPassword" ("email", "userId", "codeUnique") VALUES ($1, $2, $3) RETURNING *';
   const value = [data.email, data.userId, data.codeUnique];
