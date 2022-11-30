@@ -85,8 +85,9 @@ exports.resetPassword = (req, res) => {
       }
       try {
         if (user.length) {
+          console.log(user)
           const [resetRequest] = user;
-          if (new Date(resetRequest.createdAt).getTime() + 15 * 1000 < new Date().getTime()) {
+          if (new Date(resetRequest.createdAt).getTime() + 15 * 60 * 1000 < new Date().getTime()) {
             throw Error('backend error: code_expired')
           }
           userModel.updateUser(resetRequest.userId, { password }, (err, { rows: user }) => {
@@ -94,9 +95,9 @@ exports.resetPassword = (req, res) => {
               return errorHandler(err, res);
             }
             if (user.length) {
-              resetPasswordModel.deletedResetPassword(resetRequest.id, (err, { rows: del }) => {
-                console.log(del)
-                if (del.length) {
+              // console.log(user.length)
+              resetPasswordModel.deletedResetPassword(resetRequest.id, (err, { rows }) => {
+                if (rows.length) {
                   return res.status(200).json({
                     success: true,
                     message: 'Password succes updated, please relogin'
@@ -116,6 +117,6 @@ exports.resetPassword = (req, res) => {
     return res.status(400).json({
       success: false,
       message: 'password and confirm password not match'
-    })
+    });
   }
 };

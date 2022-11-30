@@ -55,7 +55,7 @@ exports.updateResetPassword = (req, res) => {
 };
 
 exports.deleteResetPassword = (req, res) => {
-  deletedResetPassword(req.params, (err, data) => {
+  deletedResetPassword(req.params.id, (err, data) => {
     if(err){
       return errorHandler(err, res);
     }
