@@ -1,7 +1,7 @@
 const { selectAllUsers, selectUserId, insertUser, updateUser, deletedUser, selectCountAllUsers } = require('../models/users.models');
 const errorHandler = require('../helpers/errorHandler.helpers');
 const filters = require('../helpers/filter.helpers');
-
+const fs = require('fs');
 
 exports.readAllUsers = (req, res) => {
   const sortable = ['name', 'createdAt', 'updatedAt'];
@@ -48,6 +48,21 @@ exports.createUsers = (req, res) => {
 };
 
 exports.updateUsers = (req, res) => {
+  if (req.file) {
+    req.body.picture = req.file.filename;
+    selectUserId(req.params, (err, data) => {
+      if (data.rows.length) {
+        const [users] = data.rows;
+        if(users.picture) {
+          fs.rm('uploads/' + users.picture, { force: true }, (err) => {
+            if (err) {
+              return errorHandler(err, res);
+            }
+          });
+        }
+      }
+    })
+  }
   updateUser(req.params.id, req.body, (err, data) => {
     if(err){
       return errorHandler(err, res);

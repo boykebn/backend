@@ -13,7 +13,7 @@ exports.selectMovieGenreId = (data, cb) => {
 
 exports.insertMovieGenre = (data, cb) => {
   const sql = 'INSERT INTO "movieGenre" ("movieId", "genreId") VALUES ($1, $2) RETURNING *';
-  const value = [data.movieId, data.genreId, data.codeUnique];
+  const value = [data.movieId, data.genreId];
   db.query(sql, value, cb);
 }
 

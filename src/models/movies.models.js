@@ -6,7 +6,6 @@ exports.selectAllMovies = (filter, cb) => {
   db.query(sql, values, cb);
 };
 
-
 exports.selectCountAllMovies = (filter, cb) => {
   const sql = `SELECT COUNT("movieTitle") AS "totalData" FROM "movies" WHERE "movieTitle" LIKE $1 `;
   const values = [`%${filter.search}%`];
@@ -36,3 +35,20 @@ exports.deletedMovies = (data, cb) => {
   const values = [data.id];
   db.query(sql, values, cb);
 }
+
+
+exports.upComingMovie =  (data, cb) => {
+  const sql = `SELECT * FROM "movies" WHERE date_part('year', "releaseDate")::TEXT = COALESCE(NULLIF($1, ''), date_part('year', current_date)::TEXT) AND date_part('month', "releaseDate")::TEXT = COALESCE(NULLIF($2, ''), date_part('month', current_date)::TEXT)`;
+  const values = [data.year, data.month];
+db.query(sql, values, cb);
+};
+
+exports.nowShowingMovie = (cb) => {
+  const sql = `SELECT m.id, m."movieTitle", ms."startDate", ms."endDate", string_agg(g.name, ', ') AS "genre"
+  FROM "movies" m
+  JOIN "movieSchedules" ms ON ms."movieId" = m.id
+  LEFT JOIN "movieGenre" mg ON mg."movieId" = m.id
+  LEFT JOIN "genre" g ON g.id = mg."genreId"
+  WHERE current_date BETWEEN ms."startDate" AND ms."endDate" GROUP BY m.id, ms.id`;
+  db.query(sql, cb);
+};

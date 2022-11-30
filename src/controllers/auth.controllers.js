@@ -85,7 +85,7 @@ exports.resetPassword = (req, res) => {
       }
       try {
         if (user.length) {
-          console.log(user)
+          // console.log(user)
           const [resetRequest] = user;
           if (new Date(resetRequest.createdAt).getTime() + 15 * 60 * 1000 < new Date().getTime()) {
             throw Error('backend error: code_expired')

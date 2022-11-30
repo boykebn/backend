@@ -307,3 +307,12 @@ ALTER TABLE "transaction"
 ADD CONSTRAINT "fk_transaction_movieSchedulesId"
 FOREIGN KEY ("movieSchedulesId") REFERENCES "movieSchedules" ("id")
 ON DELETE CASCADE ON UPDATE CASCADE;
+
+
+SELECT m.id, m."movieTitle", ms."startDate", ms."endDate", string_agg(g.name, ', ') AS "genre"
+FROM "movies" m
+JOIN "movieSchedules" ms ON ms."movieId" = m.id
+LEFT JOIN "movieGenre" mg ON mg."movieId" = m.id
+LEFT JOIN "genre" g ON g.id = mg."genreId"
+WHERE current_date BETWEEN ms."startDate" AND ms."endDate" GROUP BY m.id, ms.id;
+
