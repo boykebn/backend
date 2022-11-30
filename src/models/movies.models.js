@@ -25,10 +25,9 @@ exports.insertMovies = (data, cb) => {
   db.query(sql, value, cb);
 }
 
-exports.updateMovies = (data, cb) => {
-  const date = new Date();
-  const sql = `UPDATE "movies" SET "movieTitle" = COALESCE(NULLIF($1, '')::VARCHAR, "movieTitle"), "pictures" = COALESCE(NULLIF($2, '')::VARCHAR, "pictures"), "releaseDate" = COALESCE(NULLIF($3, ''), "releaseDate"), "director" = COALESCE(NULLIF($4, '')::VARCHAR, "director"), "duration" = COALESCE(NULLIF($5, '')::TIMESTAMP, "duration"), "synopsis" = COALESCE(NULLIF($6, '')::TEXT, "synopsis"), "updatedAt" =$7 WHERE id = $8 RETURNING *`;
-  const values = [data.body.movieTitle, data.body.pictures, data.body.releaseDate, data.body.director, data.body.duration, data.body.synopsis, date, data.params.id];
+exports.updateMovies = (id ,data, cb) => {
+  const sql = `UPDATE "movies" SET "movieTitle" = COALESCE(NULLIF($1, '')::VARCHAR, "movieTitle"), "pictures" = COALESCE(NULLIF($2, '')::VARCHAR, "pictures"), "releaseDate" = COALESCE(NULLIF($3, '')::DATE, "releaseDate"), "director" = COALESCE(NULLIF($4, '')::VARCHAR, "director"), "duration" = COALESCE(NULLIF($5, '')::TIME WITHOUT TIME ZONE, "duration"), "synopsis" = COALESCE(NULLIF($6, '')::TEXT, "synopsis") WHERE id = $7 RETURNING *`;
+  const values = [data.movieTitle, data.pictures, data.releaseDate, data.director, data.duration, data.synopsis, id];
   db.query(sql, values, cb);
 };
 
