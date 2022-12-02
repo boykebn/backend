@@ -1,5 +1,5 @@
 const errorHandler = require('../helpers/errorHandler.helpers');
-const { selectAllMovies, selectMoviesId, insertMovies, updateMovies, deletedMovies, selectCountAllMovies, upComingMovie, nowShowing, nowShowingMovie } = require('../models/movies.models');
+const { selectAllMovies, selectMoviesId, insertMovies, updateMovies, deletedMovies, selectCountAllMovies, upComingMovie, nowShowing, nowShowingMovie, selectFilterUpComing } = require('../models/movies.models');
 const filters = require('../helpers/filter.helpers')
 
 exports.readAllMovies = (req, res) => {
@@ -72,17 +72,21 @@ exports.deleteMovies = (req, res) => {
 };
 
 exports.upcoming = (req, res) => {
-  upComingMovie(req.query, (err, data) => {
-    if (err) {
-      console.log(err)
-      return errorHandler(err, res);
-    }
-    return res.json({
-      success: true,
-      message: 'Up Coming Movie',
-      results: data.rows,
+  const sortable = ['movieTitle', 'releaseDate', 'genre']
+  filters(req.query, sortable, selectFilterUpComing, res, (filter, pageInfo) => {
+    upComingMovie(filter, (err, data) => {
+      // console.log(err)
+      if (err) {
+        return errorHandler(err, res);
+      }
+      return res.json({
+        success: true,
+        message: 'Up Coming Movie',
+        pageInfo,
+        results: data.rows,
+      })
     })
-  })
+  });
 };
 
 exports.nowShowing = (req, res) => {

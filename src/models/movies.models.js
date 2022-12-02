@@ -37,11 +37,25 @@ exports.deletedMovies = (data, cb) => {
 }
 
 
-exports.upComingMovie =  (data, cb) => {
-  const sql = `SELECT * FROM "movies" WHERE date_part('year', "releaseDate")::TEXT = COALESCE(NULLIF($1, ''), date_part('year', current_date)::TEXT) AND date_part('month', "releaseDate")::TEXT = COALESCE(NULLIF($2, ''), date_part('month', current_date)::TEXT)`;
-  const values = [data.year, data.month];
+exports.upComingMovie =  (filter, cb) => {
+  const sql = `SELECT m.id, m.pictures, m."movieTitle", m."releaseDate", m."createdAt", string_agg(g.name,', ') AS "genre" FROM movies m
+  JOIN "movieGenre" mg ON mg."movieId" = m.id
+  JOIN "genre" g ON g.id = mg."genreId"
+  WHERE "movieTitle" LIKE $1 AND
+  date_part('year', "releaseDate")::TEXT = COALESCE(NULLIF($2,''), date_part('year', CURRENT_DATE)::TEXT) AND
+  date_part('month', "releaseDate")::TEXT = COALESCE(NULLIF($3,''), date_part('month', CURRENT_DATE)::TEXT)
+  GROUP BY m.id, m."movieTitle", m."pictures", m."releaseDate", m."createdAt"
+  ORDER BY "${filter.sortBy}" ${filter.sort} LIMIT $4 OFFSET $5`;
+  const values = [`%${filter.search}%`, filter.year, filter.month, filter.limit, filter.offset];
 db.query(sql, values, cb);
 };
+
+exports.selectFilterUpComing = (filter, cb) => {
+  const sql = `SELECT COUNT("movieTitle") AS "totalData" FROM "movies" m WHERE "movieTitle" LIKE $1 AND date_part('year', "releaseDate")::TEXT = COALESCE(NULLIF($2,''), date_part('year', CURRENT_DATE)::TEXT) AND
+  date_part('month', "releaseDate")::TEXT = COALESCE(NULLIF($3,''), date_part('month', CURRENT_DATE)::TEXT)`;
+  const values = [`%${filter.search}%`, filter.year, filter.month];
+  db.query(sql, values, cb);
+}
 
 exports.nowShowingMovie = (cb) => {
   const sql = `SELECT m.id, m."movieTitle", ms."startDate", ms."endDate", string_agg(g.name, ', ') AS "genre"
@@ -52,3 +66,7 @@ exports.nowShowingMovie = (cb) => {
   WHERE current_date BETWEEN ms."startDate" AND ms."endDate" GROUP BY m.id, ms.id`;
   db.query(sql, cb);
 };
+
+exports.selectFilterNowShowing = (filter, cb) => {
+  
+}

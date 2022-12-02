@@ -6,13 +6,18 @@ const filters = (data, sortable, countModel, res, cb) => {
   data.search = data.search || ''
   data.sortBy = (sortable.includes(data.sortBy) && data.sortBy) || 'createdAt'
   data.sort = data.sort || ''
+  data.year = data.year || ''
+  data.month = data.month || ''
+
 
   const params = {
     limit: data.limit,
     offset: (parseInt(data.page) - 1) * data.limit,
     search: data.search,
     sort: data.sort,
-    sortBy: data.sortBy
+    sortBy: data.sortBy,
+    year: data.year,
+    month: data.month
   }
 
   const pageInfo = {

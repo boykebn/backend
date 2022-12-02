@@ -316,3 +316,11 @@ LEFT JOIN "movieGenre" mg ON mg."movieId" = m.id
 LEFT JOIN "genre" g ON g.id = mg."genreId"
 WHERE current_date BETWEEN ms."startDate" AND ms."endDate" GROUP BY m.id, ms.id;
 
+
+SELECT m.id, m.pictures, m."movieTitle", m."releaseDate", m."createdAt", string_agg(g.name,', ') AS genre FROM movies m
+  JOIN "movieGenre" mg ON mg."movieId" = m.id
+  JOIN genre g ON g.id = mg."genreId"
+  WHERE
+  date_part('year', "releaseDate")::TEXT = COALESCE(NULLIF('2022',''), date_part('year', CURRENT_DATE)::TEXT) AND
+  date_part('month', "releaseDate")::TEXT = COALESCE(NULLIF('12',''), date_part('month', CURRENT_DATE)::TEXT)
+  GROUP BY m.id, m."movieTitle", m."pictures", m."releaseDate", m."createdAt";
