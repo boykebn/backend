@@ -4,7 +4,7 @@ const filters = (data, sortable, countModel, res, cb) => {
   data.page = parseInt(data.page) || 1
   data.limit = parseInt(data.limit) || 5
   data.search = data.search || ''
-  data.sortBy = (sortable.includes(data.sortBy) && data.sortBy) || 'createdAt'
+  data.sortBy = (sortable.includes(data.sortBy) && data.sortBy) || 'createdAt' || 'startDate' || 'endedAt'
   data.sort = data.sort || ''
   data.year = data.year || ''
   data.month = data.month || ''

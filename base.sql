@@ -324,3 +324,5 @@ SELECT m.id, m.pictures, m."movieTitle", m."releaseDate", m."createdAt", string_
   date_part('year', "releaseDate")::TEXT = COALESCE(NULLIF('2022',''), date_part('year', CURRENT_DATE)::TEXT) AND
   date_part('month', "releaseDate")::TEXT = COALESCE(NULLIF('12',''), date_part('month', CURRENT_DATE)::TEXT)
   GROUP BY m.id, m."movieTitle", m."pictures", m."releaseDate", m."createdAt";
+
+

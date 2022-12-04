@@ -1,4 +1,5 @@
 const errorHandler = (err, res) => {
+  console.log(err)
   if (err.message.includes('backend error:')){
     if (err.message.includes('code_expired')) {
       return res.status(400).json({
