@@ -10,7 +10,8 @@ const { Pool } = require('pg'); //
 
 
 const db = new Pool({
-  connectionString: 'postgresql://postgres:1@localhost:5432/eastick'
+  // connectionString: 'postgresql://postgres:1@localhost:5432/eastick'
+  connectionString: 'postgresql://postgres:goFZtKhuXjBe0IMv@db.efqrsqipkqhnrhtrhqpr.supabase.co:5432/postgres'
 })
 
 db.connect((err) => {
