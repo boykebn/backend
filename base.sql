@@ -326,3 +326,17 @@ SELECT m.id, m.pictures, m."movieTitle", m."releaseDate", m."createdAt", string_
   GROUP BY m.id, m."movieTitle", m."pictures", m."releaseDate", m."createdAt";
 
 
+
+BEGIN;
+INSERT INTO "transaction" ("bookingDate", "movieId", "cinemaId", "movieSchedulesId", "fullName", "phoneNUm", "statusId", "paymentMethodId") VALUES ('2022-12-04', '2', '2', '1', 'Berry', '02153478', '1', '1');
+INSERT INTO "reservedSeat" ("seatNum", "transactionId") VALUES ('C1', '1');
+COMMIT;
+
+
+SELECT m."id", m."pictures", m."movieTitle", string_agg(DISTINCT g.name,', ') AS genre, m."createdAt", m."releaseDate", m."duration", m."director", m."synopsis", string_agg(DISTINCT c.name,', ') AS casts FROM movies m
+  JOIN "movieGenre" mg ON m."id" = mg."movieId"
+  LEFT JOIN genre g ON mg."genreId" = g."id"
+  JOIN "movieCasts" mc ON m.id = mc."movieId"
+  LEFT JOIN "casts" c ON mc."castsId" = c.id
+  WHERE m."id"= 1
+  GROUP BY m."movieTitle",  m.id

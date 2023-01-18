@@ -1,4 +1,4 @@
-const authMiddleware = require('../middleware/auth.middleware');
+// const authMiddleware = require('../middleware/auth.middleware');
 
 const routes = require('express').Router();
 
@@ -13,11 +13,12 @@ routes.use('/movieSchedulesTime', require('./movieScheduleTime.router'));
 routes.use('/movieSchedules', require('./movieSchedules.router'));
 routes.use('/movieGenre', require('./movieGenre.router'));
 routes.use('/movieCasts', require('./movieCasts.router'));
-routes.use('/movies', authMiddleware, require('./movies.router'));
+routes.use('/movies', require('./movies.router'));
 routes.use('/genre', require('./genre.router'));
 routes.use('/cinemas', require('./cinemas.router'));
 routes.use('/casts', require('./casts.router'));
 
+routes.use('/profile', require('./profile.router'));
 routes.use('/auth', require('./auth.router'));
 
 module.exports = routes;

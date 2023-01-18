@@ -18,6 +18,19 @@ exports.selectMoviesId = (data, cb) => {
   db.query(sql, values, cb);
 };
 
+exports.getMoviesId = (id, cb) => {
+  const sql = `SELECT m."id", m."pictures", m."movieTitle", string_agg(DISTINCT g.name,', ') AS genre, m."createdAt", m."releaseDate", m."duration", m."director", m."synopsis", string_agg(DISTINCT c.name,', ') AS casts FROM movies m
+  JOIN "movieGenre" mg ON m."id" = mg."movieId"
+  LEFT JOIN genre g ON mg."genreId" = g."id"
+  JOIN "movieCasts" mc ON m.id = mc."movieId"
+  LEFT JOIN "casts" c ON mc."castsId" = c.id
+  WHERE m."id"= $1
+  GROUP BY m."movieTitle",  m.id`;
+  const values = [id];
+  db.query(sql, values, cb);
+};
+
+
 exports.insertMovies = (data, cb) => {
   const sql = 'INSERT INTO "movies" ("movieTitle", "pictures", "releaseDate", "director", "duration", "synopsis") VALUES ($1, $2, $3, $4, $5, $6) RETURNING *';
   const value = [data.movieTitle, data.pictures, data.releaseDate, data.director, data.duration, data.synopsis];
@@ -70,7 +83,9 @@ exports.nowShowingMovie = (filter, cb) => {
 };
 
 exports.selectFilterNowShowing = (filter, cb) => {
-  const sql = `SELECT COUNT("movieTitle") AS "totalData" FROM "movies" WHERE "movieTitle" LIKE $1`;
+  const sql = `SELECT COUNT("movieTitle") AS "totalData" FROM "movies" m
+  JOIN "movieSchedules" ms ON ms."movieId" = m.id
+  WHERE "movieTitle" like $1 AND current_date BETWEEN ms."startDate" AND ms."endDate"`;
   const values = [`%${filter.search}%`];
   db.query(sql, values, cb);
 };

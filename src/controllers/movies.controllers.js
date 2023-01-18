@@ -1,9 +1,9 @@
 const errorHandler = require('../helpers/errorHandler.helpers');
-const { selectAllMovies, selectMoviesId, insertMovies, updateMovies, deletedMovies, selectCountAllMovies, upComingMovie, nowShowing, nowShowingMovie, selectFilterUpComing, selectFilterNowShowing } = require('../models/movies.models');
+const { selectAllMovies, selectMoviesId, insertMovies, updateMovies, deletedMovies, selectCountAllMovies, upComingMovie, nowShowing, nowShowingMovie, selectFilterUpComing, selectFilterNowShowing, getMoviesId } = require('../models/movies.models');
 const filters = require('../helpers/filter.helpers')
 
 exports.readAllMovies = (req, res) => {
-  const sortable = ['name', 'createdAt', 'updatedAt']
+  const sortable = ['movieTitle', 'director', 'duration', 'synopsis']
   filters(req.query, sortable, selectCountAllMovies, res, (filter, pageInfo) => {
     selectAllMovies(filter, (err, data) => {
       if(err){
@@ -20,13 +20,13 @@ exports.readAllMovies = (req, res) => {
 };
 
 exports.readMovies = (req, res) => {
-  selectMoviesId(req.params, (err, data) => {
+  getMoviesId(req.params.id, (err, data) => {
     if(err){
       return errorHandler(err, res);
     }
     return res.status(200).json({
       succes: true,
-      message: 'Database by Id access sucsessfully',
+      message: 'Movies by Id access sucsessfully',
       results: data.rows[0]
     })
   })
@@ -96,7 +96,7 @@ exports.nowShowing = (req, res) => {
       if (err) {
         return errorHandler(err, res);
       }
-      return res.json({
+      return res.status(200).json({
         success: true,
         message: 'Now Showing Movies',
         pageInfo,

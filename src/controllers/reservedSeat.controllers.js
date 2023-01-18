@@ -5,7 +5,6 @@ exports.readAllReservedSeat = (req, res) => {
   selectAllReservedSeat(req.body, (err, data) => {
     if(err){
       console.log(err)
-      return errorHandler(err, res);
     }
     return res.status(200).json({
       succes: true,

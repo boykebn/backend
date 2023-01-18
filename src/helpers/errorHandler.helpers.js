@@ -34,4 +34,4 @@ const errorHandler = (err, res) => {
   });
 }
 
-module.exports = errorHandler
+module.exports = errorHandler;

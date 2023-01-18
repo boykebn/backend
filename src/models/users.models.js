@@ -1,13 +1,13 @@
 const db = require('../helpers/db.helpers')
 
 exports.selectAllUsers = (filter, cb) => {
-  const sql = `SELECT * FROM "users" WHERE firstName LIKE $1 ORDER BY "${filter.sortBy}" ${filter.sort} LIMIT $2 OFFSET $3`;
+  const sql = `SELECT * FROM "users" WHERE "firstName" LIKE $1 ORDER BY "${filter.sortBy}" ${filter.sort} LIMIT $2 OFFSET $3`;
   const values = [`%${filter.search}%`, filter.limit, filter.offset]
   db.query(sql, values, cb);
 };
 
 exports.selectCountAllUsers = (filter, cb) => {
-  const sql = `SELECT COUNT("firstName") AS "totalData" FROM "users" WHERE firstName LIKE $1 `;
+  const sql = `SELECT COUNT("firstName") AS "totalData" FROM "users" WHERE "firstName" LIKE $1 `;
   const values = [`%${filter.search}%`];
   db.query(sql, values, cb);
 };
@@ -18,9 +18,9 @@ exports.selectUserByEmail = (email, cb) => {
   db.query(sql, values, cb);
 };
 
-exports.selectUserId = (data, cb) => {
+exports.selectUserId = (id, cb) => {
   const sql = 'SELECT * FROM "users" WHERE id=$1';
-  const values = [data.id];
+  const values = [id];
   db.query(sql, values, cb);
 };
 

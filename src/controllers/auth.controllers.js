@@ -29,6 +29,7 @@ exports.login = (req, res) => {
 
 exports.register = (req, res) => {
   userModel.insertUser(req.body, (err, data) => {
+    // console.log(err);
     if (err) {
       return errorHandler(err, res);
     }
@@ -78,6 +79,7 @@ exports.forgotPassword = (req, res) => {
 
 exports.resetPassword = (req, res) => {
   const { password, confirmPassword } = req.body;
+  // console.log(req.body)
   if (password === confirmPassword) {
     resetPasswordModel.selectResetPasswordByEmailAndCode(req.body, (err, { rows: user }) => {
       if (err) {

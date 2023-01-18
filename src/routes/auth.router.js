@@ -8,4 +8,4 @@ auth.post('/resetPassword', resetPassword)
 
 
 
-module.exports = auth
+module.exports = auth;

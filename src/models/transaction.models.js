@@ -1,13 +1,13 @@
 const db = require('../helpers/db.helpers')
 
 exports.selectAllTransaction = (filter, cb) => {
-  const sql = `SELECT * FROM "transaction" WHERE fullName LIKE $1 ORDER BY "${filter.sortBy}" ${filter.sort} LIMIT $2 OFFSET $3`;
+  const sql = `SELECT * FROM "transaction" WHERE "fullName" LIKE $1 ORDER BY "${filter.sortBy}" ${filter.sort} LIMIT $2 OFFSET $3`;
   const values = [`%${filter.search}%`, filter.limit, filter.offset]
   db.query(sql, values, cb);
 };
 
 exports.selectCountAllTransaction = (filter, cb) => {
-  const sql = `SELECT COUNT("fullName") AS "totalData" FROM "transaction" WHERE fullName LIKE $1 `;
+  const sql = `SELECT COUNT("fullName") AS "totalData" FROM "transaction" WHERE "fullName" LIKE $1 `;
   const values = [`%${filter.search}%`];
   db.query(sql, values, cb);
 };
@@ -22,6 +22,30 @@ exports.insertTransaction = (data, cb) => {
   const sql = 'INSERT INTO "transaction" ("bookingDate", "movieId", "cinemaId", "movieSchedulesId", "fullName", "phoneNUm", "statusId",) VALUES ($1, $2, $3, $4, $5, $6, $7) RETURNING *';
   const value = [data.bookingDate, data.movieId, data.cinemaId, data.movieSchedulesId, data.fullName, data.phoneNUm, data.statusId];
   db.query(sql, value, cb);
+};
+
+exports.orderedTransaction = async (data, cb) => {
+  try{
+    await db.query("BEGIN")
+
+    const sql = 'INSERT INTO "transaction" ("bookingDate", "movieId", "cinemaId", "movieSchedulesId", "fullName", "email", "phoneNUm", "statusId", "paymentMethodId") VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9) RETURNING *';
+    const values = await db.query(sql, [data.bookingDate, data.movieId, data.cinemaId, data.movieSchedulesId, data.fullName, data.email, data.phoneNUm, data.statusId, data.paymentMethodId]);
+
+    const sqlSeat = 'INSERT INTO "reservedSeat" ("seatNum", "transactionId") VALUES ($1, $2) RETURNING *';
+    const value = await db.query(sqlSeat, [data.seatNum, data.transactionId]);
+
+    await db.query("COMMIT")
+
+    const ordered = {
+      transaction: values.rows[0],
+      reservedSeat: value.rows
+    }
+    cb(null, ordered)
+  }catch(err) {
+    await db.query("ROLLBACK")
+
+    cb(err, null)
+  }
 };
 
 exports.updateTransaction = (data, cb) => {
