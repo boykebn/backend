@@ -76,7 +76,7 @@ exports.nowShowingMovie = (filter, cb) => {
   JOIN "movieSchedules" ms ON ms."movieId" = m.id
   LEFT JOIN "movieGenre" mg ON mg."movieId" = m.id
   LEFT JOIN "genre" g ON g.id = mg."genreId"
-  WHERE current_date BETWEEN ms."startDate" AND ms."endDate" GROUP BY m.id, m."movieTitle", m."pictures", m."releaseDate", ms.id, ms."startDate", ms."endDate"
+  WHERE current_date BETWEEN ms."startDate" AND ms."endDate" GROUP BY m.id, m."movieTitle", m."pictures", m."releaseDate", m."createdAt", ms.id, ms."startDate", ms."endDate"
   ORDER BY "${filter.sortBy}" ${filter.sort} LIMIT $1 OFFSET $2`;
   const values = [filter.limit, filter.offset]
   db.query(sql, values, cb);
