@@ -49,6 +49,7 @@ exports.register = (req, res) => {
 exports.forgotPassword = (req, res) => {
   const { email } = req.body;
   userModel.selectUserByEmail(email, (err, { rows: user }) => {
+    console.log(user)
     if (err) {
       return errorHandler(err, res);
     }

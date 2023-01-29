@@ -25,7 +25,7 @@ exports.getMoviesId = (id, cb) => {
   JOIN "movieCasts" mc ON m.id = mc."movieId"
   LEFT JOIN "casts" c ON mc."castsId" = c.id
   WHERE m."id"= $1
-  GROUP BY m."movieTitle",  m.id`;
+  GROUP BY m."movieTitle", m.id, m.pictures, m."createdAt", m."releaseDate", m."duration", m."director", m."synopsis"`;
   const values = [id];
   db.query(sql, values, cb);
 };
