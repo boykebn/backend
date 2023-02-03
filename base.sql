@@ -339,4 +339,25 @@ SELECT m."id", m."pictures", m."movieTitle", string_agg(DISTINCT g.name,', ') AS
   JOIN "movieCasts" mc ON m.id = mc."movieId"
   LEFT JOIN "casts" c ON mc."castsId" = c.id
   WHERE m."id"= 1
-  GROUP BY m."movieTitle",  m.id
+  GROUP BY m."movieTitle",  m.id;
+
+
+SELECT m."id", m."pictures", m."movieTitle", string_agg(DISTINCT g.name,', ') AS genre, m."createdAt", m."releaseDate", m."duration", m."director", m."synopsis", string_agg(DISTINCT c.name,', ') AS casts, cn."id", cn."picture", cn."name", cn."city", cn."address", mt."id", mt."time", ms."id", ms."price" , ms."startDate", ms."endDate" FROM movies m
+  JOIN "movieGenre" mg ON m."id" = mg."movieId"
+  LEFT JOIN genre g ON mg."genreId" = g."id"
+  JOIN "movieCasts" mc ON m.id = mc."movieId"
+  LEFT JOIN "casts" c ON mc."castsId" = c.id
+  JOIN "cinemas" cn ON cn."id" = ms."cinemaId"
+  JOIN "movieScheduleTime" mt ON ms."id" = mt."movieSchedulesId"
+  JOIN "movieSchedules" ms ON ms."movieId" = m.id
+  WHERE m."id" = '2' AND cn."city" = 'Karawang' AND CURRENT_DATE BETWEEN ms."startDate" AND ms."endDate"
+  GROUP BY m."movieTitle", m.id;
+
+  SELECT c.city AS name
+    FROM "movieSchedules" mS
+    JOIN cinemas c ON mS."cinemaId" = c.id
+    JOIN movies m on mS."movieId" = m.id
+    JOIN "movieScheduleTimes" mST on mS.id = mST."movieScheduleId"
+    WHERE m.id = $1
+    AND (COALESCE(NULLIF($2, '')::DATE, CURRENT_DATE) BETWEEN mS."startDate" AND mS."endDate")
+    GROUP BY c.city
