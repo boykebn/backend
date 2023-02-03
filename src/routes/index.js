@@ -11,6 +11,7 @@ routes.use('/reservedSeat', require('./reservedSeat.router'));
 routes.use('/paymentMethod', require('./paymentMethod.router'));
 routes.use('/movieSchedulesTime', require('./movieScheduleTime.router'));
 routes.use('/movieSchedules', require('./movieSchedules.router'));
+routes.use('/movieDetails', require('./movieDetail.router'))
 routes.use('/movieGenre', require('./movieGenre.router'));
 routes.use('/movieCasts', require('./movieCasts.router'));
 routes.use('/movies', require('./movies.router'));
