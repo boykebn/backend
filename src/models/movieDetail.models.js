@@ -21,7 +21,7 @@ exports.getSchedulesByCity = async (id, date, cb) => {
 
 exports.getSchedulesByMovie = async (id, city, date, cb) => {
   try {
-    const sql = `SELECT ms.id as movieScheduleId, c.id, c.picture, c.name, c.address, c.city, ms.price, string_to_array(string_agg(DISTINCT mt.time::VARCHAR, ', '), ', ') as time
+    const sql = `SELECT ms.id as movieSchedulesId, c.id, c.picture, c.name, c.address, c.city, ms.price, string_to_array(string_agg(DISTINCT mt.time::VARCHAR, ', '), ', ') as time
     FROM "movieSchedules" ms
     JOIN cinemas c ON ms."cinemaId" = c.id
     JOIN movies m ON ms."movieId" = m.id
