@@ -12,8 +12,8 @@ exports.getProfile = (req, res) => {
   const authorization = req.headers.authorization.split(" ")[1];
   const auth = jwt.verify(authorization, "backend-secret");
   const { id } = auth;
-  console.log(authorization)
-  console.log(id)
+  // console.log(authorization)
+  // console.log(id)
   userModel.selectUserId(id, (err, data) => {
     if(err){
       return errorHandler(err, res);
@@ -31,9 +31,9 @@ exports.updateProfile = (req, res) => {
   const authorization = req.headers.authorization.split(" ")[1];
   const auth = jwt.verify(authorization, "backend-secret");
   const id = req.usersData.id
-  console.log(authorization)
-  console.log(id)
-  console.log(req.file)
+  // console.log(authorization)
+  // console.log(id)
+  // console.log(req.file)
   if (req.file) {
     req.body.picture = req.file.path;
     // console.log(req.file.path)
