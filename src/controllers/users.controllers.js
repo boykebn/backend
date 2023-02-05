@@ -21,7 +21,7 @@ exports.readAllUsers = (req, res) => {
 };
 
 exports.readUsers = (req, res) => {
-  selectUserId(req.params, (err, data) => {
+  selectUserId(req.params.id, (err, data) => {
     if(err){
       console.log(err);
       return errorHandler(err, res);

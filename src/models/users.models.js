@@ -19,7 +19,7 @@ exports.selectUserByEmail = (email, cb) => {
 };
 
 exports.selectUserId = (id, cb) => {
-  const sql = 'SELECT * FROM "users" WHERE id=$1';
+  const sql = 'SELECT * FROM "users" WHERE id = $1';
   const values = [id];
   db.query(sql, values, cb);
 };
@@ -42,4 +42,20 @@ exports.deletedUser = (data, cb) => {
   const sql = 'DELETE FROM "users" WHERE id = $1 RETURNING *';
   const values = [data.id];
   db.query(sql, values, cb);
+};
+
+
+exports.updatePassword = async (data, id) => {
+  try {
+    const sql = `UPDATE users SET "password" = COALESCE(NULLIF($1, ''), "password") WHERE id= $2 RETURNING *`;
+
+    const values = [
+      data,
+      id,
+    ];
+    const newUser = await db.query(sql, values);
+    return newUser.rows[0];
+  } catch (error) {
+    if (error) throw error;
+  }
 };
