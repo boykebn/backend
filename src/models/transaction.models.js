@@ -65,14 +65,14 @@ exports.orderedTransaction = async (data, cb) => {
 
 exports.selectOrderedById = async (data) => {
   try {
-    const sql = `SELECT m.movieTitle, t."bookingDate", t.time, t."totalPrice", string_agg(DISTINCT "rs"."seatNum",', ') AS seatNum, string_agg(DISTINCT g.name,', ') AS genre FROM transaction t
-    JOIN "reservedSeat" "rs" ON t.id = "rs"."transactionId"
+    const sql = `SELECT m."movieTitle", t."bookingDate", t.time, t."totalPrice", string_agg(DISTINCT rs."seatNum",', ') AS seatNum, string_agg(DISTINCT g.name,', ') AS genre FROM transaction t
+    JOIN "reservedSeat" rs ON t.id = rs."transactionId"
     JOIN "cinemas" c ON t."cinemaId" = c.id
     JOIN movies m ON t."movieId" = m.id
     JOIN "movieGenre" mg ON mg."movieId" = m.id
-    JOIN genre g ON g.id = mg"genreId"
+    JOIN genre g ON g.id = mg."genreId"
     WHERE t.id = $1
-    GROUP BY c.picture, t."bookingDate", t.time, m.movieTitle, t."totalPrice"`;
+    GROUP BY c.picture, t."bookingDate", t.time, m."movieTitle", t."totalPrice"`;
     const values = [data.id];
     const results = await db.query(sql, values);
     return results.rows;
