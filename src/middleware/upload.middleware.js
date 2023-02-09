@@ -57,32 +57,6 @@ const upload = multer({
 
 const uploaMiddleware = upload.single('picture')
 
-// const uploadErrorHandler = (err, req, res, next) => {
-//   if (err instanceof multer.MulterError) {
-//     if (err.code === "LIMIT_FILE_SIZE") {
-//       res.status(400).json({
-//         success: false,
-//         message: "File size exceeded 2Mb Limit",
-//       });
-//     } else {
-//       res.status(400).json({
-//         success: false,
-//         message: err.message,
-//       });
-//     }
-//   }  else {
-//     res.status(500).json({
-//       success: false,
-//       message: err.message,
-//     });
-//   }
-// };
-
-// module.exports = {
-//   upload,
-//   uploadErrorHandler
-// }
-
 module.exports = (req, res, next) => {
   uploaMiddleware(req, res, (err) => {
     if (err) {

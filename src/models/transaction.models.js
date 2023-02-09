@@ -12,9 +12,23 @@ exports.selectCountAllTransaction = (filter, cb) => {
   db.query(sql, values, cb);
 };
 
-exports.selectTransactionId = (data, cb) => {
-  const sql = 'SELECT * FROM "transaction" WHERE id=$1';
-  const values = [data.id];
+exports.selectTransactionId = (id, cb) => {
+  const sql = `SELECT c.picture,
+  t."bookingDate",
+  t.time,
+  m.movieTitle,
+  string_agg(DISTINCT g.name,', ') AS genre,
+  string_agg(DISTINCT rs."seatNum",', ') AS SeatNum,
+  t.id
+  FROM transaction t
+  JOIN cinemas c ON t."cinemaId" = c.id
+  JOIN movies m ON t."movieId" = m.id
+  JOIN "movieGenre" mg ON mg."movieId" = m.id
+  JOIN genre g ON g.id = mg."genreId"
+  JOIN "reversedSeat" rs ON rs."transactionId" = t.id
+  WHERE t."userId"=$1
+  GROUP BY c.picture, t."bookingDate", t.time, m.movieTitle, t.id`;
+  const values = [id];
   db.query(sql, values, cb);
 };
 
@@ -28,11 +42,12 @@ exports.orderedTransaction = async (data, cb) => {
   try{
     await db.query("BEGIN")
 
-    const sql = 'INSERT INTO "transaction" ("bookingDate", "movieId", "cinemaId", "movieSchedulesId", "fullName", "email", "phoneNUm", "statusId", "paymentMethodId") VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9) RETURNING *';
-    const values = await db.query(sql, [data.bookingDate, data.movieId, data.cinemaId, data.movieSchedulesId, data.fullName, data.email, data.phoneNUm, data.statusId, data.paymentMethodId]);
+    const sql = 'INSERT INTO "transaction" ("userId", "bookingDate", "movieId", "cinemaId", "movieSchedulesId", "fullName", "email", "phoneNUm", "statusId", "paymentMethodId", "seatNum", "time", "totalPrice") VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13) RETURNING *';
+    const values = await db.query(sql, [data.userId, data.bookingDate, data.movieId, data.cinemaId, data.movieSchedulesId, data.fullName, data.email, data.phoneNUm, data.statusId, data.paymentMethodId, data.seatNum, data.time, data.totalPrice]);
 
-    const sqlSeat = 'INSERT INTO "reservedSeat" ("seatNum", "transactionId") VALUES ($1, $2) RETURNING *';
-    const value = await db.query(sqlSeat, [data.seatNum, data.transactionId]);
+    const seats = data.seatNum.map(num => `('${num}', ${sql.rows[0].id})`).join(', ')
+    const sqlSeat = `INSERT INTO "reservedSeat" ("seatNum", "transactionId") VALUES ${seats} RETURNING *`;
+    const value = await db.query(sqlSeat);
 
     await db.query("COMMIT")
 
@@ -45,6 +60,24 @@ exports.orderedTransaction = async (data, cb) => {
     await db.query("ROLLBACK")
 
     cb(err, null)
+  }
+};
+
+exports.selectOrderedById = async (data) => {
+  try {
+    const sql = `SELECT m.movieTitle, t."bookingDate", t.time, t."totalPrice", string_agg(DISTINCT "rs"."seatNum",', ') AS seatNum, string_agg(DISTINCT g.name,', ') AS genre FROM transaction t
+    JOIN "reservedSeat" "rs" ON t.id = "rs"."transactionId"
+    JOIN "cinemas" c ON t."cinemaId" = c.id
+    JOIN movies m ON t."movieId" = m.id
+    JOIN "movieGenre" mg ON mg."movieId" = m.id
+    JOIN genre g ON g.id = mg"genreId"
+    WHERE t.id = $1
+    GROUP BY c.picture, t."bookingDate", t.time, m.movieTitle, t."totalPrice"`;
+    const values = [data.id];
+    const results = await db.query(sql, values);
+    return results.rows;
+  } catch (error) {
+    console.log(error)
   }
 };
 

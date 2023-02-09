@@ -1,4 +1,4 @@
-const { selectAllTransaction, insertTransaction, selectTransactionId, updateTransaction, deletedTransaction, selectCountAllTransaction, orderedTransaction } = require('../models/transaction.models')
+const { selectAllTransaction, insertTransaction, selectTransactionId, updateTransaction, deletedTransaction, selectCountAllTransaction, orderedTransaction, selectOrderedById } = require('../models/transaction.models')
 const errorHandler = require('../helpers/errorHandler.helpers')
 const jwt = require('jsonwebtoken')
 const filters = require('../helpers/filter.helpers')
@@ -108,4 +108,17 @@ exports.orderTransaction = (req, res) => {
       results: data
     })
   })
+};
+
+exports.historyById = async (req, res) => {
+  try {
+    const historyUser = await selectOrderedById(req.params);
+    return res.status(200).json({
+      success: true,
+      message: "History By Id Success",
+      results: historyUser[0],
+    });
+  } catch (error) {
+    console.log(error)
+  }
 };
