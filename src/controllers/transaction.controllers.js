@@ -82,6 +82,7 @@ exports.orderTransaction = (req, res) => {
   const authorization = req.headers.authorization.split(' ')[1];
   const auth = jwt.verify(authorization, process.env.SECRET_KEY || "backend-secret");
   const { id } = auth;
+  console.log(id)
 
   const result = {
     userId: id,

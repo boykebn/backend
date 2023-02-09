@@ -45,9 +45,9 @@ exports.orderedTransaction = async (data, cb) => {
     const sql = 'INSERT INTO "transaction" ("userId", "bookingDate", "movieId", "cinemaId", "movieSchedulesId", "fullName", "email", "phoneNUm", "statusId", "paymentMethodId", "seatNum", "time", "totalPrice") VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13) RETURNING *';
     const values = await db.query(sql, [data.userId, data.bookingDate, data.movieId, data.cinemaId, data.movieSchedulesId, data.fullName, data.email, data.phoneNUm, data.statusId, data.paymentMethodId, data.seatNum, data.time, data.totalPrice]);
 
-    const seats = data.seatNum.map(num => `('${num}', ${sql.rows[0].id})`).join(', ')
-    const sqlSeat = `INSERT INTO "reservedSeat" ("seatNum", "transactionId") VALUES ${seats} RETURNING *`;
-    const value = await db.query(sqlSeat);
+    // const seats = data.seatNum.map(num => `('${num}', ${sql.rows[0].id})`).join(', ')
+    const sqlSeat = `INSERT INTO "reservedSeat" ("seatNum", "transactionId") VALUES ($1, $2) RETURNING *`;
+    const value = await db.query(sqlSeat [data.seatNum, data.transactionId]);
 
     await db.query("COMMIT")
 
