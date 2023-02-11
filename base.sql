@@ -328,7 +328,7 @@ SELECT m.id, m.pictures, m."movieTitle", m."releaseDate", m."createdAt", string_
 
 
 BEGIN;
-INSERT INTO "transaction" ("bookingDate", "movieId", "cinemaId", "movieSchedulesId", "fullName", "phoneNUm", "statusId", "paymentMethodId") VALUES ('2022-12-04', '2', '2', '1', 'Berry', '02153478', '1', '1');
+INSERT INTO "transaction" ("bookingDate", "movieId", "cinemaId", "movieSchedulesId", "fullName", "phoneNUm", "statusId", "paymentMethodId") VALUES ('2023-02-13', '2', '2', '1', 'Berry', '081388562406', '1', '1', 'c1, c2, c3',);
 INSERT INTO "reservedSeat" ("seatNum", "transactionId") VALUES ('C1', '1');
 COMMIT;
 
@@ -360,4 +360,21 @@ SELECT m."id", m."pictures", m."movieTitle", string_agg(DISTINCT g.name,', ') AS
     JOIN "movieScheduleTimes" mST on mS.id = mST."movieScheduleId"
     WHERE m.id = $1
     AND (COALESCE(NULLIF($2, '')::DATE, CURRENT_DATE) BETWEEN mS."startDate" AND mS."endDate")
-    GROUP BY c.city
+    GROUP BY c.city;
+
+
+    SELECT c.picture,
+  t."bookingDate",
+  t.time,
+  m."movieTitle",
+  string_agg(DISTINCT g.name,', ') AS genre,
+  string_agg(DISTINCT rs."seatNum",', ') AS SeatNum,
+  t.id
+  FROM transaction t
+  JOIN cinemas c ON t."cinemaId" = c.id
+  JOIN movies m ON t."movieId" = m.id
+  JOIN "movieGenre" mg ON mg."movieId" = m.id
+  JOIN genre g ON g.id = mg."genreId"
+  JOIN "reservedSeat" rs ON rs."transactionId" = t.id
+  WHERE t."userId"=$1
+  GROUP BY c.picture, t."bookingDate", t.time, m."movieTitle", t.id
