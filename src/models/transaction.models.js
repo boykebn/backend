@@ -42,18 +42,27 @@ exports.orderedTransaction = async (data, cb) => {
   try{
     await db.query("BEGIN")
 
-    const sql = 'INSERT INTO "transaction" ("userId", "bookingDate", "movieId", "cinemaId", "movieSchedulesId", "fullName", "email", "phoneNUm", "statusId", "paymentMethodId", "seatNum", "time", "totalPrice") VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13) RETURNING *';
-    const values = await db.query(sql, [data.userId, data.bookingDate, data.movieId, data.cinemaId, data.movieSchedulesId, data.fullName, data.email, data.phoneNUm, data.statusId, data.paymentMethodId, data.seatNum, data.time, data.totalPrice]);
+    // const sql = 'INSERT INTO "transaction" ("userId", "bookingDate", "movieId", "cinemaId", "movieSchedulesId", "fullName", "email", "phoneNUm", "statusId", "paymentMethodId", "time", "totalPrice") VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12) RETURNING *';
+    // const values = await db.query(sql,
+    //   [data.userId, data.bookingDate, data.movieId, data.cinemaId, data.movieSchedulesId, data.fullName, data.email, data.phoneNUm, data.statusId, data.paymentMethodId, data.time, data.totalPrice]);
 
     // const seats = data.seatNum.map(num => `('${num}', ${sql.rows[0].id})`).join(', ')
+    // const sqlSeat = `INSERT INTO "reservedSeat" ("seatNum", "transactionId") VALUES ($1, $2) RETURNING *`;
+    // const value = await db.query(sqlSeat [data.seatNum, data.transactionId]);
+
+    const sql = 'INSERT INTO "transaction" ("bookingDate", "movieId", "cinemaId", "movieSchedulesId", "fullName", "email", "phoneNUm", "statusId", "paymentMethodId", "userId", "time", "totalPrice") VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12) RETURNING *';
+    const values = await db.query(sql, [data.bookingDate, data.movieId, data.cinemaId, data.movieSchedulesId, data.fullName, data.email, data.phoneNUm, data.statusId, data.paymentMethodId, data.userId, data.time, data.totalPrice]);
+
+    // const seats = data.seatNum.map(num => `('${num}', ${sql.rows[0].id})`).join(', ');
     const sqlSeat = `INSERT INTO "reservedSeat" ("seatNum", "transactionId") VALUES ($1, $2) RETURNING *`;
-    const value = await db.query(sqlSeat [data.seatNum, data.transactionId]);
+    const value = await db.query(sqlSeat, [data.seatNum, data.transactionId]);
+    // const value = await db.query(sqlSeat);
 
     await db.query("COMMIT")
 
     const ordered = {
       transaction: values.rows[0],
-      reservedSeat: value.rows
+      reservedSeat: value.rows,
     }
     cb(null, ordered)
   }catch(err) {

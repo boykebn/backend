@@ -97,10 +97,12 @@ exports.orderTransaction = (req, res) => {
     paymentMethodId: req.body.paymentMethodId,
     seatNum: req.body.seatNum,
     time: req.body.time,
-    totalPrice: req.body.totalPrice
+    totalPrice: req.body.totalPrice,
   }
   orderedTransaction(result, (err, data) => {
+    console.log(result)
     if(err){
+      // console.log(err)
       return errorHandler(err, res);
     }
     return res.status(200).json({

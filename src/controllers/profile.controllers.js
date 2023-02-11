@@ -15,6 +15,7 @@ exports.getProfile = (req, res) => {
   // console.log(authorization)
   // console.log(id)
   userModel.selectUserId(id, (err, data) => {
+    console.log(data)
     if(err){
       return errorHandler(err, res);
     }
