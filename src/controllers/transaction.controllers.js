@@ -1,4 +1,4 @@
-const { selectAllTransaction, insertTransaction, selectTransactionId, updateTransaction, deletedTransaction, selectCountAllTransaction, orderedTransaction, selectOrderedById } = require('../models/transaction.models')
+const { selectAllTransaction, insertTransaction, selectTransactionId, updateTransaction, deletedTransaction, selectCountAllTransaction, orderedTransaction, selectOrderedById, addSeat } = require('../models/transaction.models')
 const errorHandler = require('../helpers/errorHandler.helpers')
 const jwt = require('jsonwebtoken')
 const filters = require('../helpers/filter.helpers')
@@ -34,7 +34,7 @@ exports.readTransaction = (req, res) => {
     return res.status(200).json({
       succes: true,
       message: 'Transaction by Id access sucsessfully',
-      results: data.rows[0]
+      results: data.rows,
     })
   })
 };
@@ -95,20 +95,28 @@ exports.orderTransaction = (req, res) => {
     phoneNUm: req.body.phoneNUm,
     statusId: req.body.statusId,
     paymentMethodId: req.body.paymentMethodId,
-    seatNum: req.body.seatNum,
+
     time: req.body.time,
     totalPrice: req.body.totalPrice,
   }
+
   orderedTransaction(result, (err, data) => {
-    console.log(result)
+    const seat = {
+      seatNum: req.body.seatNum,
+      transactionId: data.rows[0].id,
+    }
     if(err){
-      // console.log(err)
       return errorHandler(err, res);
     }
-    return res.status(200).json({
-      succes: true,
-      message: 'Order created sucsessfully',
-      results: data
+    addSeat(seat, (error, data2) => {
+      if (error) {
+        return errorHandler(error, res);
+      }
+      return res.status(200).json({
+        succes: true,
+        message: 'Order created sucsessfully',
+        results: data2
+    })
     })
   })
 };

@@ -377,4 +377,14 @@ SELECT m."id", m."pictures", m."movieTitle", string_agg(DISTINCT g.name,', ') AS
   JOIN genre g ON g.id = mg."genreId"
   JOIN "reservedSeat" rs ON rs."transactionId" = t.id
   WHERE t."userId"=$1
-  GROUP BY c.picture, t."bookingDate", t.time, m."movieTitle", t.id
+  GROUP BY c.picture, t."bookingDate", t.time, m."movieTitle", t.id;
+
+
+  SELECT m."movieTitle", t."bookingDate", t.time, t."totalPrice", string_agg(DISTINCT rs."seatNum",', ') AS seatNum, string_agg(DISTINCT g.name,', ') AS genre FROM transaction t
+    JOIN "reservedSeat" rs ON t.id = rs."transactionId"
+    JOIN "cinemas" c ON t."cinemaId" = c.id
+    JOIN movies m ON t."movieId" = m.id
+    JOIN "movieGenre" mg ON mg."movieId" = m.id
+    JOIN genre g ON g.id = mg."genreId"
+    WHERE t.id = 34
+    GROUP BY c.picture, t."bookingDate", t.time, m."movieTitle", t."totalPrice";
