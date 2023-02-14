@@ -34,7 +34,7 @@ exports.readTransaction = (req, res) => {
     return res.status(200).json({
       succes: true,
       message: 'Transaction by Id access sucsessfully',
-      results: data.rows,
+      results: data.rows
     })
   })
 };

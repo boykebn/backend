@@ -1,11 +1,11 @@
 const transactionRouter = require('express').Router();
 
-const { readAllTransaction, readTransaction, createTransaction, updateTransaction, deleteTransaction, orderTransaction } = require('../controllers/transaction.controllers');
-const { selectOrderedById } = require('../models/transaction.models');
+const { readAllTransaction, readTransaction, createTransaction, updateTransaction, deleteTransaction, orderTransaction, historyById } = require('../controllers/transaction.controllers');
+
 
 transactionRouter.get('/', readAllTransaction);
 transactionRouter.get('/history', readTransaction);
-transactionRouter.get('/history/:id', selectOrderedById);
+transactionRouter.get('/history/:id', historyById);
 transactionRouter.post('/orderTransaction', orderTransaction);
 transactionRouter.post('/', createTransaction);
 transactionRouter.patch('/:id', updateTransaction);
