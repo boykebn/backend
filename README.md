@@ -111,3 +111,7 @@ API_SECRET = <br>
 |/transaction/order|POST|make order|
 |/transaction/history|GET|get data history transaction by user id on History page|
 |/transaction/history/:id|GET|get data id history on Ticket Result page|
+
+
+## Deploy on
+[Vercel](https://vercel.com/)
